@@ -1,13 +1,15 @@
 <?php
 /**
- * @package    block
- * @subpackage live_stats
+ * File: access.php
+ * Encoding: UTF-8
+ * @package: MOODLE PLUGINS
+ * @subpackage brigo
  * @copyright  Luuk Verhoeven [MoodleFreak.com]
  */
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'block/live_stats:viewstats' => array(
+    'block/brigo:viewstats' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,

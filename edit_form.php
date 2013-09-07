@@ -1,10 +1,10 @@
 <?php
 /**
  * @package    block
- * @subpackage live_stats
+ * @subpackage brigo
  * @copyright  Luuk Verhoeven [MoodleFreak.com]
  */
-class block_live_stats_edit_form extends block_edit_form
+class block_brigo_edit_form extends block_edit_form
 {
 
     protected function specific_definition($mform)
