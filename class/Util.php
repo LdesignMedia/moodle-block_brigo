@@ -1,22 +1,20 @@
 <?php
 
 require_once($CFG->libdir . '/pagelib.php');
-require_once dirname(__FILE__) . '/../config.php';
+require_once dirname(__FILE__) . '/Config.php';
 
 /**
  * File: Util.php
  * Encoding: UTF-8
  * @package: MOODLE PLUGINS
- *
- * @Version: 1.0.0
- * @Since 5-sep-2013
- * @Author: Luuk Verhoeven
- *
- * */
-class Livestats_Util
+ * @subpackage brigo
+ * @copyright  Luuk Verhoeven [MoodleFreak.com]
+ */
+class Brigo_Util
 {
 
     static protected $config = false;
+    static protected $sendSocketJS = false;
 
     /**
      * load the script path
@@ -26,9 +24,10 @@ class Livestats_Util
         global $PAGE;
         $config = self::getConfig();
 
-        if (!empty(self::$config->server))
+        if (!empty(self::$config->server) && !self::$sendSocketJS)
         {
-            $PAGE->requires->js(new moodle_url(self::$config->server . Livestats_Config::SOCKET_JAVASCRIPT_PATH));
+            $PAGE->requires->js(new moodle_url(self::$config->server . Brigo_Config::SOCKET_JAVASCRIPT_PATH));
+            self::$sendSocketJS = true;
             return true;
         }
         return false;
@@ -36,13 +35,24 @@ class Livestats_Util
 
     static public function addClient()
     {
-        global $PAGE, $CFG;
-        if (self::addSocketIoScript())
+        global $PAGE, $CFG, $USER;
+        if (!self::$sendSocketJS)
         {
-            $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/live_stats/js/client.js'));
-            return true;
+            self::addSocketIoScript();
         }
-        return false;
+        $config = self::getConfig();
+
+        $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo_client.js'));
+
+        if (!empty($config->hash))
+        {
+            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $config->hash, $USER->username));
+        }
+        else
+        {
+            $PAGE->requires->js_init_call('noHashSocket');
+        }
+        return true;
     }
 
     /**
@@ -53,7 +63,7 @@ class Livestats_Util
     {
         if (!self::$config)
         {
-            self::$config = get_config(Livestats_Config::NAME);
+            self::$config = get_config(Brigo_Config::NAME);
         }
         return self::$config;
     }

@@ -1,17 +1,21 @@
 <?php
 /**
- * @package    block
- * @subpackage live_stats
+ * File: block_brigo.php
+ * Encoding: UTF-8
+ * @package: MOODLE PLUGINS
+ * @subpackage brigo
  * @copyright  Luuk Verhoeven [MoodleFreak.com]
  */
 defined('MOODLE_INTERNAL') || die();
 
-class block_live_stats extends block_base
+require_once dirname(__FILE__) . '/class/Config.php';
+
+class block_brigo extends block_base
 {
 
     function init()
     {
-        $this->title = get_string('pluginname', 'block_live_stats');
+        $this->title = get_string('pluginname', 'block_brigo');
     }
 
     function instance_allow_multiple()
@@ -40,7 +44,7 @@ class block_live_stats extends block_base
         // load userdefined title and make sure it's never empty
         if (empty($this->config->title))
         {
-            $this->title = get_string('pluginname', 'block_live_stats');
+            $this->title = get_string('pluginname', 'block_brigo');
         }
         else
         {

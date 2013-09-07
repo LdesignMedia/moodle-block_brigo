@@ -1,5 +1,5 @@
 /**
- * File: live_stats.js
+ * File: brigo_stats.js
  * Encoding: UTF-8
  *
  * @Version: 0.0.1
