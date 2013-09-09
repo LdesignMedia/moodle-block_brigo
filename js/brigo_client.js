@@ -20,28 +20,16 @@ if (typeof log !== 'function')
     }
 }
 log('load Brigo client');
-var isConnected = false;
-function startSocket(yui, server, hash, username)
+function startSocket(yui, server, hash, username, id, courseid)
 {
-    log('startSocket');
     if (typeof io !== 'undefined')
     {
-        var hostdata = {host: location.host, path: location.path};
-        var socket = io.connect(server);
-        socket.on('connect', function() {
-            socket.emit('joinRoom', {room: 'stats', username: username, 'hostdata': hostdata, 'hash': hash}, function(response) {
-                if (!response)
-                {
-                    log('- disconnect');
-                    socket.disconnect();
-                }
-                else
-                {
-                    log('- connected:' + username);
-                    isConnected = true;
-                }
-            });
-        });
+        var client = brigo(server, {'username': username, 'hash': hash, 'id': id, 'courseid': courseid});
+        client.joinRoom('stats');
+        client.joinRoom('user_' + id);
+        client.getAllRooms();
+        client.getClients('stats');
+
     }
     else
     {

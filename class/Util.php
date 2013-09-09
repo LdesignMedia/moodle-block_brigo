@@ -35,23 +35,23 @@ class Brigo_Util
 
     static public function addClient()
     {
-        global $PAGE, $CFG, $USER;
+        global $PAGE, $CFG, $USER, $COURSE;
+
         if (!self::$sendSocketJS)
         {
             self::addSocketIoScript();
         }
         $config = self::getConfig();
-
-        $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo_client.js'));
-
         if (!empty($config->hash))
         {
-            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $config->hash, $USER->username));
+            $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo.js'));
+            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $config->hash, $USER->username , $USER->id , $COURSE->id));
         }
         else
         {
             $PAGE->requires->js_init_call('noHashSocket');
         }
+        $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo_client.js'));
         return true;
     }
 
