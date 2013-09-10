@@ -19,14 +19,18 @@ if (typeof log !== 'function')
         }
     }
 }
+ var client = false;
 log('load Brigo client');
 function startSocket(yui, server, hash, username, id, courseid)
 {
     if (typeof io !== 'undefined')
     {
-        var client = brigo(server, {'username': username, 'hash': hash, 'id': id, 'courseid': courseid});
+        client = brigo(server, {'username': username, 'hash': hash, 'id': id, 'courseid': courseid});
         client.joinRoom('stats');
-        client.joinRoom('user_' + id);
+        if (id > 0)
+        {
+            client.joinRoom('user_' + id);
+        }
         client.getAllRooms();
         client.getClients('stats');
 

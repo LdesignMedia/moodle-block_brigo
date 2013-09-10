@@ -45,7 +45,9 @@ class Brigo_Util
         if (!empty($config->hash))
         {
             $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo.js'));
-            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $config->hash, $USER->username , $USER->id , $COURSE->id));
+
+            $username = !empty($USER->username) ? $USER->username: 'guest';
+            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $config->hash, $username , $USER->id , $COURSE->id));
         }
         else
         {
@@ -67,5 +69,5 @@ class Brigo_Util
         }
         return self::$config;
     }
-
+    
 }
