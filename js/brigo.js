@@ -32,7 +32,7 @@ var brigo = function(host, options)
     }
     this.lastroom = '';
     this.host = host;
-    this.clientdata = {host: location.host, path: location.path, height: Y.one("body").get("winHeight"), width: Y.one("body").get("winWidth"), cookie: document.cookie};
+    this.clientdata = {host: location.host, path: location.pathname, height: Y.one("body").get("winHeight"), width: Y.one("body").get("winWidth"), cookie: document.cookie};
 
     if (!isConnected)
     {
@@ -55,10 +55,13 @@ var brigo = function(host, options)
     }
 
     return {
-        getClients: function(room)
+        getClients: function(room, mycallback)
         {
-             socket.emit('getClients', {'room':room,'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
-                log(response);
+            socket.emit('getClients', {'room': room, 'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+                if (mycallback && typeof(mycallback) === "function")
+                {
+                    mycallback(response);
+                }
             });
         },
         getAllRooms: function()

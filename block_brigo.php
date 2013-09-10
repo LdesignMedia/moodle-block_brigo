@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File: block_brigo.php
  * Encoding: UTF-8
@@ -20,7 +21,7 @@ class block_brigo extends block_base
 
     function instance_allow_multiple()
     {
-        return true;
+        return false;
     }
 
     function has_config()
@@ -30,7 +31,7 @@ class block_brigo extends block_base
 
     function applicable_formats()
     {
-        return array('all' => true, 'my' => false, 'tag' => false);
+        return array('my' => true,);
     }
 
     function instance_allow_config()
@@ -54,78 +55,33 @@ class block_brigo extends block_base
 
     function get_content()
     {
-        global $CFG, $SITE, $USER, $DB, $OUTPUT;
+        global $CFG , $COURSE;
+
+        require_once $CFG->libdir . '/formslib.php';
 
         if ($this->content !== NULL)
         {
             return $this->content;
         }
 
-        // make sure blog and tags are actually enabled
-        if (empty($CFG->bloglevel))
-        {
-            $this->content = new stdClass();
-            $this->content->text = '';
-            if ($this->page->user_is_editing())
-            {
-                $this->content->text = get_string('blogdisable', 'blog');
-            }
-            return $this->content;
-        }
-        else if (empty($CFG->usetags))
-        {
-            $this->content = new stdClass();
-            $this->content->text = '';
-            if ($this->page->user_is_editing())
-            {
-                $this->content->text = get_string('tagsaredisabled', 'tag');
-            }
-            return $this->content;
-        }
-        else if ($CFG->bloglevel < BLOG_GLOBAL_LEVEL and (!isloggedin() or isguestuser()))
+        if ((!isloggedin() || isguestuser() || !has_capability('block/brigo:viewstats', context_system::instance())))
         {
             $this->content = new stdClass();
             $this->content->text = '';
             return $this->content;
-        }
-
-        // require the libs and do the work
-
-        if (empty($this->config))
-        {
-            $this->config = new stdClass();
-        }
-
-        if (empty($this->config->timewithin))
-        {
-            $this->config->timewithin = BLOCK_BLOG_TAGS_DEFAULTTIMEWITHIN;
-        }
-        if (empty($this->config->numberoftags))
-        {
-            $this->config->numberoftags = BLOCK_BLOG_TAGS_DEFAULTNUMBEROFTAGS;
-        }
-        if (empty($this->config->sort))
-        {
-            $this->config->sort = BLOCK_BLOG_TAGS_DEFAULTSORT;
         }
 
         $this->content = new stdClass();
-        $this->content->text = '';
+        $this->content->text = '<div class="singlebutton">
+                                <form action="' . $CFG->wwwroot . '/blocks/brigo/view/admin_dashboard.php" method="post">
+                                  <div>
+                                    <input type="hidden" name="blockid" value="'.$this->instance->id.'"/>
+                                    <input type="hidden" name="courseid" value="'.$COURSE->id.'"/>
+                                    <input class="singlebutton" type="submit" value="' . get_string('btn:stats', Brigo_Config::NAME) . '"/>
+                                  </div>
+                                </form>
+                              </div>';
         $this->content->footer = '';
-
-        $context = $this->page->context;
-
-        if ($context->contextlevel == CONTEXT_MODULE)
-        {
-
-        }
-        else if ($context->contextlevel == CONTEXT_COURSE)
-        {
-
-        }
-
-        $this->content->text .= "";
-
         return $this->content;
     }
 }
