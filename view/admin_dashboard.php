@@ -11,7 +11,7 @@
  *
  * */
 require_once(dirname(__FILE__) . '/../../../config.php');
-global $DB, $OUTPUT, $PAGE , $CFG;
+global $DB, $OUTPUT, $PAGE, $CFG;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -39,12 +39,12 @@ $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo_stats
 
 
 //add crumbs
-$settingsnode = $PAGE->settingsnav->add(get_string('pluginname',  Brigo_Config::NAME));
+$settingsnode = $PAGE->settingsnav->add(get_string('pluginname', Brigo_Config::NAME));
 $editnode = $settingsnode->add(get_string('crumb:stats', Brigo_Config::NAME), $url);
 $editnode->make_active();
 $context = get_context_instance(CONTEXT_SYSTEM);
 
-if(!has_capability('block/brigo:viewstats', $context))
+if (!has_capability('block/brigo:viewstats', $context))
 {
     print_error('error:capability', Brigo_Config::NAME);
 }
@@ -53,8 +53,15 @@ if(!has_capability('block/brigo:viewstats', $context))
 echo $OUTPUT->header();
 //start content
 $content = '<div id="brigoStatsHolder">
-    <h4 id="pageVistors">Page views <b></b></h4>
-    <div id="coursechart"></div>
+        <div id="statsLeft">
+            <h4 id="pageVistors">Page views <b></b></h4>
+            <strong>Course Viewers</strong>
+            <div id="coursechart"></div>
+        </div>
+        <div id="statsRight">
+             <strong id="onlineUsersHeading">Online users</strong>
+            <div id="onlineUsers"></div>
+        </div>
     </div>';
 
 echo $OUTPUT->box($content, 'block');

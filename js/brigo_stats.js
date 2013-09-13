@@ -31,12 +31,27 @@ function updateClients(Y)
                 var myDataValues = [];
                 var courseClients = [];
                 var myAxes = {
-                    visitors: {
+                    values: {
+                        keys: ["visitors"],
                         type: "numeric",
                         position: "left",
+                        minimum: 0,
+                        maximum: response.length,
+                        roundingMethod: 1,
+                        labelFunction: function(label, format)
+                        {
+                            return label;
+                        },
+                        styles: {
+                            majorUnit: {
+                                count: 5
+                            },
+                        }
                     },
                 };
                 Y.one('#pageVistors b').set('text', response.length);
+                Y.one('#onlineUsers').set('text', '');
+                var clientUnique = [];
                 for (var i = 0; i < response.length; i++)
                 {
                     var client = response[i];
@@ -49,6 +64,21 @@ function updateClients(Y)
                     {
                         courseClients[client.statsData.courseid] += 1;
                     }
+
+                    if (typeof clientUnique[client.statsData.username] === 'undefined')
+                    {
+                        clientUnique[client.statsData.username] = {'username': client.statsData.username, 'count': 1};
+                    }
+                    else
+                    {
+                        clientUnique[client.statsData.username] = {'username': client.statsData.username, 'count': clientUnique[client.statsData.username].count + 1};
+                    }
+                }
+
+                for (var key in clientUnique) {
+                    if (clientUnique.hasOwnProperty(key)) {
+                      Y.one('#onlineUsers').append('<div class="item"><b>' +   clientUnique[key].username + ' (' +   clientUnique[key].count + ')</b></div>');
+                    }
                 }
 
                 for (var i = 0; i < courses.length; i++)
@@ -57,6 +87,11 @@ function updateClients(Y)
                     var id = course.id;
                     var count = courseClients[id];
                     log(course);
+                    if (id === 1)
+                    {
+                        course.name = 'No Course';
+                    }
+
                     myDataValues.push({course: course.name, visitors: count});
                 }
                 log(myDataValues);
@@ -66,7 +101,7 @@ function updateClients(Y)
                 }
                 else
                 {
-                    mychart.set('dataProvider' , myDataValues);
+                    mychart.set('dataProvider', myDataValues);
                 }
 
             }
