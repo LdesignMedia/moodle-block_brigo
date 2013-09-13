@@ -20,6 +20,7 @@ if (typeof log !== 'function')
 
 var isConnected = false;
 var socket = false;
+var popup = false;
 
 var brigo = function(host, options)
 {
@@ -63,6 +64,31 @@ var brigo = function(host, options)
                     mycallback(response);
                 }
             });
+        },
+        toolbar: function(Y, courseid, pageLayout)
+        {
+            var bar = Y.one('#brigoBar');
+
+            if (bar === null)
+            {
+                //build bar
+                if (pageLayout !== 'popup')
+                {
+                    Y.one('body').append('<div id="brigoBar" style="cursor:pointer;line-height:40px;vertical-algin:middle;color:#fff;font-size:20px;font-weight:bold;text-align:center;background:#C7D61E;position:fixed;height:40px;width:200px;bottom:0;right:0;border-radius: 10px 0 0 0"><span>LIVE CHAT</span></div>');
+                }
+
+                Y.one('#brigoBar').on("click", function(e) {
+                    log('open popup');
+                    if (!popup)
+                    {
+                        popup = window.open('/blocks/brigo/view/chat.php?courseid=' + courseid, 'BRIGO_LiveChat', 'height=400,width=800,resizable=no,scrollbars=no,status=no,toolbar=no');
+                    }
+                    else
+                    {
+                        popup.focus();
+                    }
+                });
+            }
         },
         getAllRooms: function()
         {

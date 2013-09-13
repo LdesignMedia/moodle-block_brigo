@@ -111,14 +111,10 @@ function updateClients(Y)
 
 YUI().use('charts', function(Y)
 {
-    updateClients(Y);
+    setTimeout(function(){ updateClients(Y);} , 1000);
 
     setInterval(function() {
         updateClients(Y);
     }, 10000);
-
-
-
     //Click handler
-
 });
