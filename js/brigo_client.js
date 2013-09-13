@@ -19,26 +19,37 @@ if (typeof log !== 'function')
         }
     }
 }
- var client = false;
+var client = false;
 log('load Brigo client');
-function startSocket(yui, server, hash, username, id, courseid)
+function startSocket(yui, server, username, id, courseid, config)
 {
-    if (typeof io !== 'undefined')
-    {
-        client = brigo(server, {'username': username, 'hash': hash, 'id': id, 'courseid': courseid});
-        client.joinRoom('stats');
-        if (id > 0)
+    YUI().use('json-parse', 'json-stringify', function(Y) {
+        // JSON is available and ready for use. Add implementation
+        // code here.
+        if (typeof io !== 'undefined')
         {
-            client.joinRoom('user_' + id);
-        }
-        client.getAllRooms();
-        client.getClients('stats');
+            config = Y.JSON.parse(config);
+            log(config);
 
-    }
-    else
-    {
-        log('Socket script not found!');
-    }
+            client = brigo(server, {'username': username, 'hash': config.hash, 'id': id, 'courseid': courseid});
+            client.joinRoom('stats');
+            if (id > 0)
+            {
+                client.joinRoom('user_' + id);
+            }
+            client.getAllRooms();
+            client.getClients('stats');
+
+            if (config.show_chatbar === "yes")
+            {
+                client.toolbar(yui, courseid, config.pageLayout);
+            }
+        }
+        else
+        {
+            log('Socket script not found!');
+        }
+    });
 }
 
 function noHashSocket()
