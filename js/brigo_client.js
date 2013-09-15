@@ -1,14 +1,3 @@
-/**
- * File: brigo_client.js
- * Encoding: UTF-8
- *
- * @Version: 0.0.1
- * @Since 5-sep-2013
- * @Author: Luuk Verhoeven
- *
- * Copyright  Luuk Verhoeven
- *
- **/
 if (typeof log !== 'function')
 {
     function log(i) {
@@ -35,7 +24,10 @@ function startSocket(yui, server, username, id, courseid, config)
             client.joinRoom('stats');
             if (id > 0)
             {
-                client.joinRoom('user_' + id);
+               socket = client.joinRoom('user_' + id);
+               socket.on('notice',function(response){
+                   log(response);
+               });
             }
             client.getAllRooms();
             client.getClients('stats');

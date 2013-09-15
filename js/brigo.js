@@ -20,7 +20,6 @@ if (typeof log !== 'function')
 
 var isConnected = false;
 var socket = false;
-var popup = false;
 
 var brigo = function(host, options)
 {
@@ -79,7 +78,7 @@ var brigo = function(host, options)
 
                 Y.one('#brigoBar').on("click", function(e) {
                     log('open popup');
-                    if (!popup)
+                    if (typeof popup  === 'undefined' || popup.closed)
                     {
                         popup = window.open('/blocks/brigo/view/chat.php?courseid=' + courseid, 'BRIGO_LiveChat', 'height=400,width=800,resizable=no,scrollbars=no,status=no,toolbar=no');
                     }
@@ -96,7 +95,7 @@ var brigo = function(host, options)
                 log(response);
             });
         },
-        message: function(message, room)
+        addMessage: function(message, room)
         {
             log(message);
             return this;
@@ -124,7 +123,7 @@ var brigo = function(host, options)
                     }
                 }
             });
-            return this;
+            return socket;
         }
     };
 };

@@ -53,12 +53,12 @@ class Brigo_Util
         if (!empty($config->hash))
         {
             $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/brigo/js/brigo.js'));
-            $username = !empty($USER->username) ? $USER->username: 'guest';
+            $username = !empty($USER->username) ? $USER->username : 'guest';
 
             unset($config->token);
             $config->pageLayout = $PAGE->__get('pagelayout');
 
-            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $username , $USER->id , $COURSE->id , json_encode($config)));
+            $PAGE->requires->js_init_call('startSocket', array(self::$config->server, $username, $USER->id, $COURSE->id, json_encode($config)));
         }
         else
         {
@@ -79,6 +79,17 @@ class Brigo_Util
             self::$config = get_config(Brigo_Config::NAME);
         }
         return self::$config;
+    }
+
+    /**
+     * check if a moodle user is guest
+     * @global type $USER
+     * @return type
+     */
+    static public function isUser()
+    {
+        global $USER;
+        return ($USER->id > 0) ? true : false;
     }
 
 }
