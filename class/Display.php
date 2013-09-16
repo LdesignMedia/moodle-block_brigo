@@ -39,6 +39,9 @@ class Brigo_Display
      */
     public function friends()
     {
+        global $CFG;
+        $this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/jquery.tinyscrollbar.min.js');
+
         $this->buffer('start');
         include dirname(__FILE__) . '/../view/page/friends.php';
         $this->buffer('end');
@@ -60,6 +63,7 @@ class Brigo_Display
     public function publicRoom()
     {
         global $CFG;
+        $this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/jquery.tinyscrollbar.min.js');
         $this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/brigo_publicroom.js');
 
         $this->buffer('start');
@@ -98,7 +102,7 @@ class Brigo_Display
         }
         else
         {
-            $this->content = ob_get_contents();
+            $this->content .= ob_get_contents();
             ob_end_clean();
         }
     }

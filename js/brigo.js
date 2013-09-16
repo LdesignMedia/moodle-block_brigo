@@ -32,7 +32,15 @@ var brigo = function(host, options)
     }
     this.lastroom = '';
     this.host = host;
-    this.clientdata = {host: location.host, path: location.pathname, height: Y.one("body").get("winHeight"), width: Y.one("body").get("winWidth"), cookie: document.cookie};
+    if (typeof Y !== 'undefined')
+    {
+        this.clientdata = {host: location.host, path: location.pathname, height: Y.one("body").get("winHeight"), width: Y.one("body").get("winWidth"), cookie: document.cookie};
+    }
+    else
+    {
+        //jquery engine
+        this.clientdata = {host: location.host, path: location.pathname, height: $(window).height(), width: $(window).width(), cookie: document.cookie};
+    }
 
     if (!isConnected)
     {
@@ -78,7 +86,7 @@ var brigo = function(host, options)
 
                 Y.one('#brigoBar').on("click", function(e) {
                     log('open popup');
-                    if (typeof popup  === 'undefined' || popup.closed)
+                    if (typeof popup === 'undefined' || popup.closed)
                     {
                         popup = window.open('/blocks/brigo/view/chat.php?courseid=' + courseid, 'BRIGO_LiveChat', 'height=400,width=800,resizable=no,scrollbars=no,status=no,toolbar=no');
                     }
@@ -93,6 +101,17 @@ var brigo = function(host, options)
         {
             socket.emit('getRooms', {'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
                 log(response);
+            });
+        },
+        getLastMessages: function(room, element)
+        {
+            socket.emit('getLastMessages', {'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+                if (response.length > 0)
+                {
+                    $.each(response, function(k, row) {
+                        
+                    });
+                }
             });
         },
         addMessage: function(message, room)

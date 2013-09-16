@@ -68,6 +68,25 @@ class Brigo_Util
         return true;
     }
 
+    static public function getjavascriptParams($courseid = 0)
+    {
+        global $PAGE, $CFG, $USER, $COURSE;
+        $config = self::getConfig();
+        if (!empty($config->hash))
+        {
+            unset($config->token);
+            $username = !empty($USER->username) ? $USER->username : 'guest';
+            return '<script src="'.self::$config->server . Brigo_Config::SOCKET_JAVASCRIPT_PATH.'"></script><script type="text/javascript">
+                    var server =  "' . self::$config->server . '";
+                    var username =  "' . $username . '";
+                    var courseid =  ' . $courseid . ';
+                    var userid =  ' .  $USER->id . ';
+                    var config =  ' .  json_encode($config) . ';
+                    </script>';
+        }
+        return '<script type="text/javascript">alert("Please check the settings")</script>';
+    }
+
     /**
      * Get plugin config
      * @return object|false
