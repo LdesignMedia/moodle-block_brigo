@@ -17,9 +17,19 @@ if (typeof log !== 'function')
         }
     }
 }
-
+//GUID
+function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+}
+;
+//GUID
+function guid() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+//
 var isConnected = false;
 var socket = false;
+var GUID = guid();
 
 var brigo = function(host, options)
 {
@@ -103,21 +113,27 @@ var brigo = function(host, options)
                 log(response);
             });
         },
-        getLastMessages: function(room, element)
+        getHistoryMessages: function(room)
         {
-            socket.emit('getLastMessages', {'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+            log('getHistoryMessages');
+
+            socket.emit('getHistoryMessages', {'room': room, 'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+
+                log(response);
+
                 if (response.length > 0)
                 {
-                    $.each(response, function(k, row) {
-                        
+                    $.each(response, function(k, data) {
+                        addRow(data.message, data.userid, data.username, 'partner', ' ');
                     });
                 }
             });
         },
-        addMessage: function(message, room)
+        addMessage: function(message, userid, room)
         {
-            log(message);
-            return this;
+            socket.emit('setMessage', {'message': message, 'userid': userid, 'room': room, 'guid': GUID, 'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+                log(response);
+            });
         },
         joinRoom: function(room, saveRoom)
         {
