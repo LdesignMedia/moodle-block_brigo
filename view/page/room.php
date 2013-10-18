@@ -12,10 +12,10 @@
         <div class="space">
             <h4><?php echo get_string('messages', Brigo_Config::NAME) ?></h4>
             <div id="brigoMessages" class="brigoScroll">
-                 <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
                 <div class="viewport">
                     <div class="overview">
-                        <!-- users -->
+                        <!-- chat -->
                     </div>
                 </div>
             </div>
@@ -39,6 +39,7 @@
                 <div class="viewport">
                     <div class="overview">
                         <!-- users -->
+
                     </div>
                 </div>
             </div>

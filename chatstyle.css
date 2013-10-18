@@ -1,3 +1,8 @@
+body,html{overflow: hidden;}
+#brigoRoomContent{
+    width: 100%;overflow: hidden;height: 100%;
+}
+.spacer{padding: 10px}
 .noM{padding: 0;margin: 0; max-width: none;}
 #brigoContent{background: #EEEEEE;width: 100%;margin-top: 31px;}
 #brigoOnlineUsers{ width: 100%; clear: both;background: #FFFFFF; border-radius: 4px 4px 4px 4px; border: 1px solid #CCCCCC; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;}
@@ -27,7 +32,7 @@
 }
 #brigoMessages .overview{padding: 20px}
 .brigoRow {
-    background: none repeat scroll 0 0 #EEEEEE;
+    background: none repeat scroll 0 0 #95C7F9;
     display: inline-block;
     margin-bottom: 15px;
     margin-left: 0;
@@ -39,21 +44,38 @@
     min-height: 51px;
     padding-bottom: 5px;
 }
+.brigoRow.partner{
+    float: right;
+    background: none repeat scroll 0 0 #F3F3F3;
+}
 .brigoRow .space{
     padding: 5px 12px;
 }
 .brigoRow .text h5{margin:0;font-style:italic;font-weight: 800}
 .brigoRow .avatar{float: left;margin-right: 10px;display: table;}
+.brigoRow.partner .avatar{float: right;margin: 0 0 0 10px;}
 .brigoRow .text{float: left;display: table;}
-.brigoRow:after {
-    border-color: transparent #EEEEEE;
+.brigoRow.me:after {
+    border-color: transparent #95C7F9;
     border-style: solid;
     border-width: 10px 15px 10px 0;
     content: "";
     display: block;
     left: -15px;
     position: absolute;
-    top: 5px;
+    top: 15px;
+    width: 0;
+    z-index: 1;
+}
+.brigoRow.partner:after {
+    border-color: transparent #F3F3F3;
+    border-style: solid;
+    border-width: 10px 0 10px 15px;
+    content: "";
+    display: block;
+    right: -15px;
+    position: absolute;
+    top: 15px;
     width: 0;
     z-index: 1;
 }

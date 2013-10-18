@@ -1,3 +1,5 @@
+var settings = {'room': 'publicRoom'};
+
 function resize()
 {
     var wWidth = $(document).width();
@@ -7,7 +9,8 @@ function resize()
     $('#brigoUserHolder').width(200);
 
     $('#brigoMessages ,#brigoMessages .viewport').height(wHeight - 196);
-    $('#brigoMessages .viewport').width(wWidth - 220);
+    $('#brigoMessages .viewport').width(wWidth - 230);
+    $('#brigoMessages .viewport .overview').width(wWidth - 265);
     $('#brigoContent').height(wHeight - 50);
     $('#brigoOnlineUsers .viewport,#brigoOnlineUsers').height(wHeight - 160);
     $('#addBrigoMessage').width(wWidth - 200 - 95);
@@ -65,41 +68,52 @@ function send()
     }
     else if (client)
     {
-        client.addMessage();
-        addRow(value , userid , username);
+        client.addMessage(value, userid, settings.room);
+        addRow(value, userid, username, 'me');
     }
 }
 
 var avatars = [];
-function addRow(message, id, username)
+function addRow(message, id, username, className, time)
 {
     if (typeof avatars[id] === 'undefined')
     {
         $.ajax({
             url: "/blocks/brigo/avatar.php?userid=" + id,
             method: "get",
+            async: false,
             cache: false,
             success: function(string) {
                 avatars[id] = string;
-                pushMessage(string, username, message);
+                pushMessage(string, username, message, className, time);
             }
         });
     }
     else
     {
-        pushMessage(avatars[id], username, message);
+        pushMessage(avatars[id], username, message, className, time);
     }
 }
-function pushMessage(avatar, username, message)
+function pushMessage(avatar, username, message, className, time)
 {
     var regex = /[*|,\\":<>\[\]{}`';()@&$#%!+-]/;
     if (regex.test(message))
     {
         return;
     }
-    var time = new Date();
-    time = time.getHours() + ':' + time.getMinutes();
-    $('#brigoMessages .overview').append('<div class="brigoRow"><div class="space"><div class="avatar"><img src="'+ avatar +'" alt="' + username + '"/></div><div class="text"><h5>' + username + ' - '+time+'</h5>' + message + '</div></div></div>');
+
+    if ($('#brigoMessages .brigoRow').length > 100)
+    {
+        $('#brigoMessages .brigoRow').first().remove();
+    }
+
+    if (!time)
+    {
+        var time = new Date();
+        time = time.getHours() + ':' + time.getMinutes();
+    }
+
+    $('#brigoMessages .overview').append('<div class="brigoRow ' + className + '"><div class="space"><div class="avatar"><img src="' + avatar + '" alt="' + username + '"/></div><div class="text"><h5>' + username + ' - ' + time + '</h5>' + message + '</div></div></div>');
     $('#brigoMessages').tinyscrollbar_update('bottom');
 }
 
@@ -108,7 +122,7 @@ function pushMessage(avatar, username, message)
     $(function() {
         resize();
 
-        $('#brigoSend').click(function(e){
+        $('#brigoSend').click(function(e) {
             e.preventDefault();
             send();
         });
@@ -122,11 +136,20 @@ function pushMessage(avatar, username, message)
             log(config);
 
             client = brigo(server, {'username': username, 'hash': config.hash, 'id': userid, 'courseid': courseid});
-            client.joinRoom('publicRoom');
+            var socket = client.joinRoom(settings.room);
 
-            client.getClients('publicRoom');
+            socket.on('getNewMessage', function(data) {
+                log('getNewMessage');
+                log(data);
 
-            client.getLastMessages('publicRoom', '#');
+                addRow(data.message, data.userid, data.username, 'partner');
+            });
+
+            //userlist
+            client.getClients(settings.room);
+
+            //getHistoryMessages
+            client.getHistoryMessages(settings.room);
         }
         else
         {

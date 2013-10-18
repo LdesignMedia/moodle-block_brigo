@@ -25,4 +25,5 @@ $string['setting:hash'] = 'Will be filled when you click on Validate Code';
 $string['crumb:stats'] = 'Realtime Stats';
 $string['title:adminstats'] = 'Realtime Stats';
 
-
+//desc
+$string['desc:dashboard'] = 'Please select your room in tabs above.';

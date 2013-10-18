@@ -10,7 +10,7 @@
 class Brigo_Display
 {
 
-    protected $pageList = array('friends' => array('allowGuest' => false), 'publicRoom' => array('allowGuest' => false));
+    protected $pageList = array('friends' => array('allowGuest' => true), 'publicRoom' => array('allowGuest' => true), 'dashboard' => array('allowGuest' => true));
     protected $content = '';
     protected $errors = array();
     protected $page = '';
@@ -18,20 +18,18 @@ class Brigo_Display
 
     public function __construct($page = '')
     {
-        if (isset($this->pageList[$page]))
+        if (!isset($this->pageList[$page]))
         {
-            global $CFG;
-            $this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/brigo.js');
-
-            //is callable page
-            $this->$page();
-
-            $this->page = $page;
+            $page = 'dashboard';
         }
-        else
-        {
-            $this->setError(get_string('error:page_not_found', Brigo_Config::NAME));
-        }
+
+        global $CFG;
+        $this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/brigo.js');
+
+        //is callable page
+        $this->$page();
+
+        $this->page = $page;
     }
 
     /**
@@ -57,8 +55,22 @@ class Brigo_Display
         return $this->javascripts;
     }
 
+        /**
+     * dashboard
+     */
+    public function dashboard()
+    {
+        global $CFG;
+        //$this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/jquery.tinyscrollbar.min.js');
+        //$this->addJavascript($CFG->wwwroot . '/blocks/brigo/js/brigo_publicroom.js');
+        $this->buffer('start');
+        include dirname(__FILE__) . '/../view/page/dashboard.php';
+        $this->buffer('end');
+    }
+
+
     /**
-     * return publicRoom
+     * publicRoom
      */
     public function publicRoom()
     {
