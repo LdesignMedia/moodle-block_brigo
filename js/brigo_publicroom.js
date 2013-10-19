@@ -42,6 +42,12 @@ function resize()
     };
 })(jQuery, 'smartresize');
 
+var updateAllRoomUsers = function(data)
+{
+    log('updateAllRoomUsers')
+    log(data);
+}
+
 function noHashSocket()
 {
     if (typeof io === 'undefined')
@@ -146,7 +152,7 @@ function pushMessage(avatar, username, message, className, time)
             });
 
             //userlist
-            client.getClients(settings.room);
+            client.getAllRoomUsers(settings.room , updateAllRoomUsers);
 
             //getHistoryMessages
             client.getHistoryMessages(settings.room);

@@ -21,7 +21,6 @@ if (typeof log !== 'function')
 function s4() {
     return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
 }
-;
 //GUID
 function guid() {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
@@ -76,6 +75,17 @@ var brigo = function(host, options)
         getClients: function(room, mycallback)
         {
             socket.emit('getClients', {'room': room, 'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+                log('getClients');
+                if (mycallback && typeof(mycallback) === "function")
+                {
+                    mycallback(response);
+                }
+            });
+        },
+        getAllRoomUsers : function(room, mycallback)
+        {
+            socket.emit('getAllRoomUsers', {'room': room, 'username': settings['username'], 'hostdata': clientdata, 'hash': settings['hash'], 'id': settings['id'], 'courseid': settings['courseid']}, function(response) {
+                log('getAllRoomUsers');
                 if (mycallback && typeof(mycallback) === "function")
                 {
                     mycallback(response);
