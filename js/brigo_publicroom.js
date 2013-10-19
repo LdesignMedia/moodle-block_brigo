@@ -42,11 +42,14 @@ function resize()
     };
 })(jQuery, 'smartresize');
 
-var updateAllRoomUsers = function(data)
+var updateAllRoomUsers = function(response)
 {
-    log('updateAllRoomUsers')
-    log(data);
-}
+    log('updateAllRoomUsers');
+    $.each(response, function(k, data) {
+        $('#brigoOnlineUsers .overview').append('<div id="' + data.clientid + '" rel="' + data.userid + '" class="onlineUser ' + data.username + '">' + data.username + '</div>');
+    });
+    $('#brigoOnlineUsers').tinyscrollbar_update('bottom');
+};
 
 function noHashSocket()
 {
@@ -151,8 +154,19 @@ function pushMessage(avatar, username, message, className, time)
                 addRow(data.message, data.userid, data.username, 'partner');
             });
 
+            socket.on('exitClient', function(data) {
+                $('#' + data.clientid).remove();
+                $('#brigoOnlineUsers').tinyscrollbar_update('bottom');
+            });
+
+            socket.on('newClient', function(data) {
+                log('newClient');
+                $('#brigoOnlineUsers .overview').append('<div id="' + data.clientid + '" rel="' + data.userid + '" class="onlineUser ' + data.username + '">' + data.username + '</div>');
+            });
+
+
             //userlist
-            client.getAllRoomUsers(settings.room , updateAllRoomUsers);
+            client.getAllRoomUsers(settings.room, updateAllRoomUsers);
 
             //getHistoryMessages
             client.getHistoryMessages(settings.room);
