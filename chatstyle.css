@@ -4,9 +4,9 @@ body,html{overflow: hidden;}
 }
 .spacer{padding: 10px}
 .noM{padding: 0;margin: 0; max-width: none;}
-#brigoContent{background: #EEEEEE;width: 100%;margin-top: 31px;}
+#brigoContent{background: #EEEEEE;width: 100%;margin-top: 51px;}
 #brigoOnlineUsers{ width: 100%; clear: both;background: #FFFFFF; border-radius: 4px 4px 4px 4px; border: 1px solid #CCCCCC; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;}
-.brigoScroll .viewport { width: 100%; height: 100%; overflow: hidden; position: relative; }
+.brigoScroll .viewport {height: 100%; overflow: hidden; position: relative; }
 .brigoScroll .overview { list-style: none; position: absolute; left: 0; top: 0; }
 .brigoScroll .thumb .end,.brigoScroll .thumb { background-color: #B9B9B9;}
 .brigoScroll .scrollbar { position: relative; float: right; width: 15px; }
@@ -51,10 +51,11 @@ body,html{overflow: hidden;}
 .brigoRow .space{
     padding: 5px 12px;
 }
-.brigoRow .text h5{margin:0;font-style:italic;font-weight: 800}
 .brigoRow .avatar{float: left;margin-right: 10px;display: table;}
 .brigoRow.partner .avatar{float: right;margin: 0 0 0 10px;}
-.brigoRow .text{float: left;display: table;}
+.brigoRow .text{vertical-align: baseline;}
+.brigoRow.history{opacity: 0.4}
+.brigoRow .text h5{margin:0 0 5px;font-style:italic;font-weight: 800;min-width: 250px}
 .brigoRow.me:after {
     border-color: transparent #95C7F9;
     border-style: solid;
@@ -78,4 +79,10 @@ body,html{overflow: hidden;}
     top: 15px;
     width: 0;
     z-index: 1;
+}
+#brigoOnlineUsers .onlineUser{
+    text-align: center;
+    width: 187px;
+    padding: 5px 0;
+    border-bottom: 1px solid #EEEEEE;
 }

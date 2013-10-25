@@ -27,3 +27,6 @@ $string['title:adminstats'] = 'Realtime Stats';
 
 //desc
 $string['desc:dashboard'] = 'Please select your room in tabs above.';
+$string['messages'] = 'Messages';
+$string['typehere'] = 'Your message';
+$string['online_clients'] = 'Online Users';

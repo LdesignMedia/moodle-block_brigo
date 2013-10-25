@@ -23,8 +23,8 @@ $chatUrl = '/blocks/brigo/view/chat.php';
 $chatparams = array('courseid' => $courseid , 'page' => $page);
 
 //INIT PAGE
-$PAGE->set_context(CONTEXT_SYSTEM);
-$PAGE->set_cacheable(false);
+$PAGE->set_context(context_system::instance());
+//$PAGE->set_cacheable(false);
 $PAGE->set_title(get_string('title:chat', Brigo_Config::NAME));
 
 $url = new moodle_url($chatUrl, $chatparams);
@@ -34,24 +34,24 @@ $isMoodleUser = Brigo_Util::isUser();
 //we dont use moodle for this!!
 $display = new Brigo_Display($page);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="author" content="MoodleFreak.com">
         <title>Brigo: Live Chat</title>
         <!-- Bootstrap core CSS -->
         <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="../chatstyle.css" rel="stylesheet">
+        <link href="../emoticons.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="../bootstrap/js/html5shiv.js"></script>
           <script src="../bootstrap/js/respond.min.js"></script>
         <![endif]-->
-
-
     </head>
     <body>
         <!-- Fixed navbar -->
@@ -105,6 +105,7 @@ $display = new Brigo_Display($page);
         <?php echo Brigo_Util::getjavascriptParams($courseid);?>
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="../bootstrap/js/bootstrap.min.js"></script>
+        <script src="../js/emoticons.js"></script>
          <?php
         if(!empty($display->javascripts))
         {

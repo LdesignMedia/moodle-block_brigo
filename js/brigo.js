@@ -134,7 +134,7 @@ var brigo = function(host, options)
                 if (response.length > 0)
                 {
                     $.each(response, function(k, data) {
-                        addRow(data.message, data.userid, data.username, 'partner', ' ');
+                        addRow(data.message, data.userid, data.username, 'partner history', ' ');
                     });
                 }
             });
@@ -159,6 +159,9 @@ var brigo = function(host, options)
                 }
                 else
                 {
+                    //when guest the username will changed here
+                    settings['username'] = response;
+                    username = response;
                     log('- connected:' + settings['username'] + '/' + room);
                     if (saveRoom)
                     {
